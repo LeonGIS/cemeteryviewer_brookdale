@@ -2,4 +2,4 @@
 Brookdale Cemetery Viewer
 
 
-[![Image of Tax Parcel Viewer application](cemeteryviewer.png "Tax Parcel Viewer application")](http://links.esri.com/localgovernment/tryit/TaxParcelViewer/)
+[![Image of Brookdale Cemetery Viewer application](cemeteryviewer.png "Brookdale Cemetery Viewer")](http://gis.dedham-ma.gov/cemeteryviewer_brookdale/)
