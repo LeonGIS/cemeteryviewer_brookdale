@@ -1,26 +1,11 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "z://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" >
 <head>
-    <meta charset=utf-8>
-    <!--
-     | Version 10.2
-     | Copyright 2012 Esri
-     |
-     | Licensed under the Apache License, Version 2.0 (the "License");
-     | you may not use this file except in compliance with the License.
-     | You may obtain a copy of the License at
-     |
-     |    http://www.apache.org/licenses/LICENSE-2.0
-     |
-     | Unless required by applicable law or agreed to in writing, software
-     | distributed under the License is distributed on an "AS IS" BASIS,
-     | WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-     | See the License for the specific language governing permissions and
-     | limitations under the License.
-    -->
     <title>Online Help</title>
-    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=7" />
+    
     <style type="text/css">
         body
         {
@@ -30,37 +15,87 @@
             font-family: Arial;
             background-color: #6E6E6E;
         }
-
+        
         .style1
         {
             color: #FFFF66;
             font-weight: bold;
         }
+        
+        .imgHelp
+		{
+    		width: 57px;
+		}
+
+		.divHelpHeader
+		{
+		    vertical-align: middle;
+		    background-color: #6E6E6E;
+		    top: 0px;
+		    height: 55px;
+		    width: 100%;
+		    position: absolute;
+		    z-index: 1000;
+		    overflow: hidden;
+		    font-size: 24px;
+		    
+		}
+		
+		.divHelpLogo
+		{
+		    position: absolute !important;
+		    top: 0px;
+		    left: 0px;
+		    width: 75px;
+		    height: 75px;
+		    z-index: 10000;
+		    display: block;
+		}
+		.lblAppName
+		{
+		    padding-left: 70px;
+		}
+.tableHeader
+{
+    width: 100%;
+    height: 100%;
+}
+        
     </style>
 </head>
 <body>
- 	<div class="Help" id="Help" style="Z-INDEX: 1000; LEFT: 5%; OVERFLOW: visible; WIDTH: 90%; POSITION: absolute; TOP: 20px; HEIGHT: 500px">
-	    <img src=images/logo.png width="75" height="75" />
+	<div id="divHelpLogo" class="divHelpLogo">
+		<table style="width: 100%;">
+			<tr>
+				<td><img id="imgHelp" class="imgHelp" src="images/logo.png" /></td>
+			</tr>
+		</table>
+	</div>
+
+	<div class="divHelpHeader">
+		<table cellpadding="0" cellspacing="0" class="tableHeader">
+			<tr>
+				<td id="lblAppName" class="lblAppName" align="left" style="color: White;" valign="center">Brookdale Cemetery</td>
+				<td align="right">
+				</td>
+			</tr>
+		</table>
+	</div>
+	
+	 <div class="Help" id="Help" style="Z-INDEX: 1000; LEFT: 5%; OVERFLOW: visible; WIDTH: 90%; POSITION: absolute; TOP: 40px; HEIGHT: 500px">
+	    
         <h1>Online Help:</h1>
-	    <p>The <b>Tax Parcel Viewer</b> provides the general public and other interested parties local government property tax and assessment information and supplements that information with lifestyle and internet broadband information for a given neighborhood.  It is a single application that can be deployed by local governments and used by citizens on a desktop PC, mobile phone, and tablet device.<br/><br/>To locate a parcel, simply click on the map or enter an address or parcel number in the search box and select a parcel from the list.</p>
+	    <p>The <b>Brookdale Cemetery Viewer</b> provides the user burial information for the Brookdale Cemetery in Dedham, Massachusetts.  It is a single application used on a desktop PC, mobile phone, and tablet device.<br/><br/>To locate a burial lot, simply click on the map or use the search box and select an item from the list.</p>
 	    <h4><u>Using the Application</u></h4>
-	    <p>This application is named the Tax Parcel Viewer.  It offers a map-based view of tax parcel information that enables supporting agencies, organizations and the general public to locate an area of interest and review common information stored typically in the local government’s computer aided mass appraisal (CAMA) and tax receivables database.   It offers a standard overview of property data in a community for real estate professionals and other consumers so they can view this information on all homes as they walk or drive through neighborhoods.<br/><br/>Users are able to search for a specific address or parcel number, view authoritative property characteristics, sales and foreclosure information, and email this information to a friend or co-worker. They can also provide feedback to local governments so the quality of parcel boundaries and associated characteristics improve over time.</p>
+	    <p>This application is named the Brookdale Cemetery Viewer.  It offers a map-based view of cemetery information that enables the user to locate lot and review burial information.</p>
         <h4><u>Finding an Area of Interest</u></h4>
-        <p>There are three primary ways to identify an area of interest. You can interact directly with the map and click on a parcel when you've located it. You can also use your current location or finally search for a parcel using a full or partial address, Parcel ID, or subdivision/condo name.</p>
+        <p>There are three primary ways to identify an area of interest:<br /><br />1.You can interact directly with the map and click on a burial lot when you've located it.<br />2. You can also use your current location within the cemetery.<br />3. You can search for a lot by an individual's name or by lot number .</p>
         <h4><u>Map Based Navigation</u></h4>
-        <p>There are several ways to interact with the map:<br /><br />1. Use the base map switcher (not available on smartphone) to select the base map you'd like to interact with<br />2. Hold down the shift key and drag a box on the map to zoom in<br />3. Hold Down Ctrl+Shift to zoom out<br />4. Roll your mouse roller to zoom in/out<br />5. Drag the zoom slider to zoom in/out</p>
+        <p>There are several ways to interact with the map:<br /><br />1. Hold down the shift key and drag a box on the map to zoom in<br />2. Hold Down Ctrl+Shift to zoom out<br />3. Roll your mouse roller to zoom in/out<br />4. Drag the zoom slider to zoom in/out</p>
         <h4><u>Searching</u></h4>
-        <p>The search box can be used to find a parcel:<br /><br />1. Enter a complete or partial address, Parcel ID, or subdivision/condo name<br />2. Click on the item in the results list to locate the parcel on the map</p>
-        <h4><u>Property, Neighborhood and Broadband Information</u></h4>
-        <p>After searching for a respective parcel and selecting it from the list, the parcel will be highlighted on the map. At the same time, relevant information will be presented in the information popup. In the Property tab, you'll find tax parcel characteristics provided by the local government.  In the Neighborhood tab, you'll find Lifestyle information is provided by Esri Tapestry Segmentation.  And finally, in the Broadband tab you'll find broadband availability information provided by the National Broadband Map.</p>
-        <h4><u>Submit Feedback</u></h4>
-        <p>When you locate a parcel you feel may have a boundary, characteristic or other problem, click on the Submit Feedback button to submit feedback on the parcel. Select the type of feedback, draw the location on the map, enter your comments, and finally provide your contact information.<br><br>Click the Submit button when you're finished.</p>
-        <h4><u>Standard Maps and Reports</u></h4>
-        <p>The application also provides users a standard set of parcel maps and reports.  When a user accesses the Tax Parcel Viewer on a desktop PC or tablet device, reports can be generated for one or more parcels and added to the application’s shopping cart as they are created.  The shopping cart can be configured by the local government to provide maps and reports to users free of charge, or for a fee through integration with the Paypal Express Checkout API.</p>
-        <h4><u>Share Your Map</u></h4>
-        <p>You can click on the Share Map button to share your map several different ways.  You can compose an email, post to your Facebook wall or post a Tweet. When you use the Facebook or Twitter links, you'll be asked to sign in to your respective account.</p>
-        <h4><u>More Information</u></h4>
-        <p>The <b>Tax Parcel Viewer</b> application can used by assessors, treasurers or other local government organizations responsible for land records information to deliver a web-based tax parcel public access application. This application provides 24x7 access to the organization and typically supplements customer service phone numbers staffed by these organizations.<br /></p>
+        <p>The search box can be used to find an individual or lot number:<br /><br />1. Enter a complete or part of a lot number or an individual's first or last name<br />2. Click on the item in the results list to locate burial lot on the map</p>
+        <h4><u>Browser Compatibility</u></h4>
+        <p>The Brookdale Cemetery Viewer application is supported on the following browsers: Microsoft IE 7/8/9, Mozilla Firefox, Google Chrome, Apple Safari, iOS Safari 4.0+, and Android Chrome 2.3+.<br/></p>    
     </div>
 </body>
 </html>

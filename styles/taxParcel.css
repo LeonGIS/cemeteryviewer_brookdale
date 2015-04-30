@@ -1,20 +1,4 @@
-﻿/*
- | Version 10.2
- | Copyright 2012 Esri
- |
- | Licensed under the Apache License, Version 2.0 (the "License");
- | you may not use this file except in compliance with the License.
- | You may obtain a copy of the License at
- |
- |    http://www.apache.org/licenses/LICENSE-2.0
- |
- | Unless required by applicable law or agreed to in writing, software
- | distributed under the License is distributed on an "AS IS" BASIS,
- | WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- | See the License for the specific language governing permissions and
- | limitations under the License.
- */
-/* This file contains the common style settings for "Tax Parcel Viewer" template */
+﻿/* This file contains the common style settings for "Tax Parcel Viewer" template */
 /* Use this file to perform the following: */
 
 /* 1.  Set the body styles                      - { Style(s) to look for: html, body } */
@@ -39,8 +23,7 @@
                                                                           divInfoWindowContainer .title,imgArrow}*/
 /* 10. Set the styles for esri slider           - { Style(s) to look for: esriSimpleSlider}*/
 /* 11. Set the styles for loading indicator     - { Style(s) to look for: divLoadingIndicator}*/
-/* 12. Set styles for tab container             - { Style(s) to look for: mblTabBarButtonIcon,mblTabBarSegmentedControl,mblTabBarButton:first-child,mblTabBarButton:last-child,
-                                                                          mblTabBarSegmentedControl .mblTabBarButton.mblTabBarButtonSelected,mblTabBarButtonSelected,mblTabBarButton}*/
+/* 12. Set styles for tab container             - { Style(s) to look for: mblTabBarButtonIcon,mblTabPanelHeader,mblTabButton:first-childmblTabButton:last-                                                                                              child,mblTabPanelHeader .mblTabButton.mblTabButtonSelected,mblTabButtonSelected,mblTabButton}*/
 /* 13. Set styles for side panel                - { Style(s) to look for: divSidePanel,divDataContainer,divEmptySpace,tableHeader}*/
 /* 14. Set styles for forms                     - { Style(s) to look for: divDropDownContainer,txtSelectedRequest, .txtSelectedLayout,divRequestTypes,
                                                                           imgDropdownCarot,tdWordBreak,tooltip,a:link,a:visited}*/
@@ -101,7 +84,7 @@ html, body
 {
     text-align: left;
     z-index: 1000;
-    background-color: black;
+    background-color: black;  
 }
 
 .divSplashContent
@@ -126,7 +109,6 @@ html, body
     background: -webkit-gradient(linear, left top, left bottom, from(#888), to(#575757)) !important;
     background: -moz-linear-gradient(top, #888, #575757) !important;
     background: -o-linear-gradient(#888, #575757) !important;
-    background: -ms-linear-gradient(#888, #575757) !important;
     -moz-border-radius: 5px;
     -webkit-border-radius: 5px;
     border-radius: 5px;
@@ -397,7 +379,7 @@ html, body
     width: 75px;
     height: 75px;
     z-index: 10000;
-    display: none;
+    display: block;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
@@ -710,7 +692,7 @@ html, body
     display: none;
 }
 
-.mblTabBarSegmentedControl
+.mblTabPanelHeader
 {
     background: none !important;
     border-top: none;
@@ -721,7 +703,7 @@ html, body
     text-shadow: none;
 }
 
-.mblTabBarButton:first-child
+.mblTabButton:first-child
 {
     -webkit-border-top-left-radius: 5px;
     -webkit-border-bottom-left-radius: 5px;
@@ -732,7 +714,7 @@ html, body
     border-bottom-left-radius: 5px 5px;
 }
 
-.mblTabBarButton:last-child
+.mblTabButton:last-child
 {
     -webkit-border-top-right-radius: 5px;
     -webkit-border-bottom-right-radius: 5px;
@@ -743,24 +725,23 @@ html, body
     border-bottom-right-radius: 5px 5px;
 }
 
-.mblTabBarSegmentedControl .mblTabBarButton.mblTabBarButtonSelected
+.mblTabPanelHeader .mblTabButton.mblTabButtonSelected
 {
     color: #fcd3a5;
     border: solid 1px #da7c0c;
     background: -webkit-gradient(linear, left top, left bottom, from(#f47a20), to(#faa51a));
     background: -moz-linear-gradient(top,  #f47a20,  #faa51a);
-    background: -ms-linear-gradient(top,  #f47a20,  #faa51a);
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f47a20', endColorstr='#faa51a');
-    height: 28px;
+    height: 26px;
 }
 
-.mblTabBarButtonSelected
+.mblTabButtonSelected
 {
     cursor: default !important;
 }
 
-.mblTabBarSegmentedControl .mblTabBarButton
-{
+.mblTabButton
+{   
     background: #0e0e0e; /* Old browsers */
     background: -moz-linear-gradient(top, #0e0e0e 0%, #7d7e7d 100%); /* FF3.6+ */
     background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#0e0e0e), color-stop(100%,#7d7e7d)); /* Chrome,Safari4+ */
@@ -770,7 +751,6 @@ html, body
     background: linear-gradient(top, #0e0e0e 0%,#7d7e7d 100%); /* W3C */
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#0e0e0e', endColorstr='#7d7e7d',GradientType=0 ); /* IE6-9 */
     font-family: Verdana !important;
-    font-weight: normal;
     border-right-color: #303030 !important;
 }
 
@@ -784,7 +764,7 @@ html, body
     height: 100%;
     width: 350px;
     position: absolute;
-    z-index: 999;
+    z-index: 1001;
     overflow: hidden;
 }
 
@@ -792,6 +772,7 @@ html, body
 {
     background-color: #585858;
     height: 100%;
+    margin-top: 55px;
 }
 
 .divEmptySpace
@@ -913,11 +894,3 @@ a:visited
     border: 0px solid;
     border-color: black;
 }
-
-.imgSearchLoader
-{
-    vertical-align: middle;
-    display: none;
-    cursor: default;
-}
-

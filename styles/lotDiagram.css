@@ -1,0 +1,195 @@
+﻿/* This file contains the common style settings for "Tax Parcel Viewer" template */
+/* Use this file to perform the following: */
+
+/* 1.  Set the body styles                      - { Style(s) to look for: html, body } */
+/* 2.  Set styles for splash screen             - { Style(s) to look for: divSplashScreenContainer,divSplashScreenDialog,divSplashScreenDialog,divSplashContent,
+                                                                          divSplashContainer,customButton,customButtonInner } */
+/* 3.  Set the styles for Election Result Updates
+                                                - { Style(s) to look for: divResultsUpdateInfo}*/
+/* 4.  Set the styles for animations            - { Style(s) to look for: slideTransition,hideHeaderContainer,showHeaderContainer,hideBottomContainer,showBottomContainer,
+                                                                          hideContainer,showContainer,hideContainerHeight,showContainerHeight,opacityHideAnimation,
+                                                                          opacityShowAnimation,esriLogo}*/
+/* 5.  Set the styles for share container       - { Style(s) to look for: divShareContainer}*/
+/* 6.  Set the styles for application header    - { Style(s) to look for: lblAppName,imgOptions,tableHeader,imgApplication,divApplicationHeader,divLogo}*/
+/* 7.  Set the styles for search container      - { Style(s) to look for: divAddressScrollContainer,divAddressScrollContent,tblHeader,divAddressPlaceHolder,txtAddress,
+                                                                          imgLocate,divAddressList,tdSearchByAddress,tdSearchByPrecinct,tdSearchByUnSelectedPrecinct,
+                                                                          tdSearchByUnSelectedAddress,bottomborder}*/
+/* 8.  Set the styles for bottom panel          - { Style(s) to look for: divBottomPanelHeader,divBottomPanelBody,divTemplateBox,divTemplateHeader,spanHeader,
+                                                                          divContentStyle,divElectionResultsContainer,divElectionContestContainer,
+                                                                          divElectionResultsContent,divElectionContestContent,divElectionContestContent,
+                                                                          divElectionResultsView,border}*/
+/* 9.  Set the styles for info window           - { Style(s) to look for: divInfoWindowContainer,divTriangle,dj_ie .divInfoWindowContainer,
+                                                                          divInfoWindowContainer .container,imgInfoWindow,divInfoWindowContainer .content,
+                                                                          divInfoWindowContainer .title,imgArrow}*/
+/* 10. Set the styles for esri slider           - { Style(s) to look for: esriSimpleSlider}*/
+/* 11. Set the styles for loading indicator     - { Style(s) to look for: divLoadingIndicator}*/
+/* 12. Set styles for tab container             - { Style(s) to look for: mblTabBarButtonIcon,mblTabPanelHeader,mblTabButton:first-childmblTabButton:last-                                                                                              child,mblTabPanelHeader .mblTabButton.mblTabButtonSelected,mblTabButtonSelected,mblTabButton}*/
+/* 13. Set styles for side panel                - { Style(s) to look for: divSidePanel,divDataContainer,divEmptySpace,tableHeader}*/
+/* 14. Set styles for forms                     - { Style(s) to look for: divDropDownContainer,txtSelectedRequest, .txtSelectedLayout,divRequestTypes,
+                                                                          imgDropdownCarot,tdWordBreak,tooltip,a:link,a:visited}*/
+/* 13. Set styles for chart container           - { Style(s) to look for: divChartContent}*/
+
+/*--------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+
+/* Styles for body*/
+
+html, body
+{
+    height: 100%;
+    margin: 5px;
+    padding: 1px;
+    width: 100%;
+    font-family: Tahoma !important;
+    font-size:large;
+    overflow: hidden;
+    color: Black;
+    visibility: visible !important;
+}
+
+[type=text]
+{
+    font-family: Tahoma;
+}
+
+/*--------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+.tr { border: 1px solid #000;  height:10px;font-size:small;width:100%;}
+.td { width: 130px; }
+.th { font-size:medium;text-align:center;}
+
+/*--------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+
+
+/*--------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+
+
+/*-------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+
+
+/*--------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+
+
+/*--------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+
+/*Styles for application header */
+
+.lblAppName
+{
+    padding-left: 70px;
+}
+
+.imgOptions
+{
+    height: 30px !important;
+    width: 30px !important;
+    vertical-align: middle;
+}
+
+.tableHeader
+{
+    width: 100%;
+    height: 100%;
+}
+
+.imgApplication
+{
+    width: 57px;
+}
+
+.divApplicationHeader
+{
+    vertical-align: middle;
+    background: rgb(255,255,255);
+    top: 0px;
+    height: 55px;
+    width: 100%;
+    position: absolute;
+    z-index: 1000;
+    overflow: hidden;
+    font-size: 24px;
+    
+}
+
+.divLogo
+{
+    position: absolute !important;
+    top: 0px;
+    left: 0px;
+    width: 75px;
+    height: 75px;
+    z-index: 10000;
+    display: block;
+}
+
+
+.divHeaderInfo
+{
+	top: 200px;
+	
+}
+
+.divContentPane
+{
+	top: 65px;
+	width: 100%;
+    position: absolute;
+}
+
+
+/*--------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+
+
+/*--------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+
+
+
+/*--------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+
+/* Styles for loading indicator*/
+
+.divLoadingIndicator
+{
+    top: 0px;
+    left: 0px;
+    background: rgba(0,0,0,0.65);
+    -pie-background: rgba(0,0,0,0.65);
+    position: absolute;
+    z-index: 100001;
+    width: 100%;
+    height: 100%;
+    behavior: url("styles/PIE.htc");
+}
+
+/*--------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+
+
+/*--------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+
+
+
+/*--------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+
+
+
+/*--------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+#title
+{
+    height: 30px;
+    width: 85%;
+}
+
+#textTable
+{
+    float: left;
+    border: 1px;
+    border-color: blue;
+}
+
+.table
+{
+    border: 0px solid;
+    border-color: black;
+}

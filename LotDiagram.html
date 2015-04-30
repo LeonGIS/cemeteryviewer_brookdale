@@ -1,0 +1,640 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
+  <title>Brookdale Lot Diagram</title>
+  <link id="stylesheet" href='http://serverapi.arcgisonline.com/jsapi/arcgis/2.8/js/dojo/dojox/mobile/themes/iPhone/iPhone.css' rel='stylesheet' />
+<link href="styles/lotDiagram.css" rel="stylesheet" type="text/css" />
+ 
+
+
+</head>
+
+<script type="text/javascript">
+  djConfig = {
+	parseOnLoad:true
+  }
+</script>
+<script type="text/javascript" src="http://serverapi.arcgisonline.com/jsapi/arcgis/?v=2.8compact"></script>
+<script type="text/javascript" src="js/config.js">
+</script>
+<script type="text/javascript" src="js/Common.js">
+</script>
+<script type="text/javascript" src="js/GraveClass.js">
+</script>
+	<script src="js/utils.js" type="text/javascript"></script>
+
+<script type="text/javascript" >
+	dojo.require("esri.tasks.query");
+	dojo.require("esri.layers.FeatureLayer");
+   //dojo.require("esri.tasks.find");
+   
+  
+   // Variable set from Config Properties  
+   var queryTableString;
+	var searchLayerStr, allgravesLayerNum;
+	var fields = {};
+   
+  // run the config.js function to set the machine-specific services and related properties
+   //setConfigProperties();
+  
+	// Variables for setting up & executing find task
+	var findTask_Graves, findParams_Graves, searchResults_Graves;
+ 	var GravesArray;
+  	var MaxTableRows;
+  
+  var lotFields;
+   var LotFeatureLayer;
+   var graveRelateId;
+   
+ 	function doContent(){
+ 		
+ 		
+ 		
+ 		
+ 		ShowProgressIndicator();
+		var url = esri.urlToObject(window.location.toString());
+		if (url.query && url.query != null) {
+			var LotNumber = url.query.LotNumber;
+		
+			
+			// Get values from config file
+			dojo.xhrGet({
+					url : "errorMessages.xml",
+					handleAs : "xml",
+					preventCache : true,
+					load : function(xmlResponse) {
+						messages = xmlResponse;
+					}
+				});
+				
+			var responseObject = new js.config();
+			lotLayer = responseObject.LotLayer;
+			queryLayerString = lotLayer.ServiceURL;
+			
+		
+		
+			LotFeatureLayer = new esri.layers.FeatureLayer(queryLayerString);
+			lotFields = lotLayer.Fields;
+			
+					
+			dojo.byId('LotNumber').innerHTML = LotNumber;
+	
+			MaxTableRows = 10;
+			
+			// Get lot attributes & query related graves
+			queryTableString = responseObject.GraveTable.ServiceURL;
+			graveRelateId = lotLayer.GraveTableRelateId;
+			
+			QueryLotLayerById_diagram(LotNumber);
+		}
+	  else {
+		  //can't set values
+		  HideProgressIndicator();
+			alert("No query parameters passed to html page, unable to display property photos");
+		}
+	}
+
+
+// Function: QueryLotLayerById
+  // Description: Search for lot feature by LOTID field
+  function QueryLotLayerById_diagram(searchID, OID){
+	  var queryTask = new esri.tasks.QueryTask(queryLayerString);
+	  var query = new esri.tasks.Query();
+	  query.returnGeometry = true;
+	  query.where =  "\"" + lotFields.LotNumber + "\" = '" + searchID + "'" ;
+	  query.outFields = [
+	                     lotFields.OID,
+	                     lotFields.LotNumber,
+	                     lotFields.OwnerLast,
+	                     lotFields.OwnerFirst,
+	                     lotFields.Book,
+	                     lotFields.Page,
+	                     lotFields.Location,
+	                     lotFields.GravesTotal,
+	                     lotFields.GravesAvail
+	                     ];
+
+	  // console.log("Execute queryById")
+	  queryTask.execute(query, function(fset) {
+
+		  if (fset.features.length >= 1) {
+			  // console.log("queryByID: 1 rec returned")
+			  // Check selected OID against current pop-up display... don't execute if not necessary
+			// if ((!featureID) || (featureID != fset.features[0].attributes[lotFields.OID]) || (!map.infoWindow.isShowing))
+			//  {
+				// Get Lot Attributes
+				var strLotNumber;
+				//if (fset.features[0].attributes[lotFields.LotNumber] instanceof Array) strLotNumber = fset.features[0].attributes[lotFields.LotNumber][0];
+				//else 
+				strLotNumber = fset.features[0].attributes[lotFields.LotNumber];
+				if(null == strLotNumber || "Null" == strLotNumber || "null" == strLotNumber) strLotNumber = "";
+				strLotNumber = strLotNumber.replace(/[']/g, " ");
+		
+				var strOwnerLastName; 
+				//if (fset.features[0].attributes[lotFields.OwnerLast] instanceof Array) strOwnerLastName = fset.features[0].attributes[lotFields.OwnerLast][0];
+				//else 
+				strOwnerLastName = fset.features[0].attributes[lotFields.OwnerLast];
+   				if(null == strOwnerLastName || "Null" == strOwnerLastName || "null" == strOwnerLastName) strOwnerLastName = "";
+   				else strOwnerLastName = strOwnerLastName.replace(/[']/g, " ");
+   				
+			  	var strOwnerFirstName;
+				var strOwnerFullName;
+				//if (fset.features[0].attributes[lotFields.OwnerFirst] instanceof Array) strOwnerFirstName  = fset.features[0].attributes[lotFields.OwnerFirst][0];
+				//else 
+				strOwnerFirstName  = fset.features[0].attributes[lotFields.OwnerFirst];
+        		if(null == strOwnerFirstName || "Null" == strOwnerFirstName || "null" == strOwnerFirstName) strOwnerFirstName = "";
+   				else strOwnerFirstName = strOwnerFirstName.replace(/[']/g, " ");
+     	
+		
+				if (strOwnerFirstName != "") strOwnerFullName =  strOwnerLastName + ", " + strOwnerFirstName;
+	 			else strOwnerFullName = strOwnerLastName;
+	 			
+	 			var strBook = fset.features[0].attributes[lotFields.Book]
+	 			var strPage = fset.features[0].attributes[lotFields.Page]
+	 			if(null == strBook || "Null" == strBook || "null" == strBook) strBook = "";
+				if(null == strPage || "Null" == strPage || "null" == strPage) strPage = "";
+			
+				if(strPage == "" && strBook == "") strBookPage = "";
+				else strBookPage = strBook + "/" + strPage;
+	 			
+	 			var strLotLocation = fset.features[0].attributes[lotFields.Location];
+				if(null == strLotLocation || "Null" == strLotLocation || "null" == strLotLocation) strLotLocation = "";
+				strLotLocation = strLotLocation.replace(/[']/g, " ");
+	 			
+	 			var TotalGraves   = fset.features[0].attributes[lotFields.GravesTotal];
+	 			var GravesAvailable  = fset.features[0].attributes[lotFields.GravesAvail];
+	 			if (null == TotalGraves || "Null" == TotalGraves || "null" == TotalGraves) TotalGraves = "";
+				if (null == GravesAvailable|| "Null" == GravesAvailable || "null" == GravesAvailable) GravesAvailable = "";
+	 			
+	 			var strLotRemarks = fset.features[0].attributes[lotFields.Remarks];
+				if(null == strLotRemarks || "Null" == strLotRemarks || "null" == strLotRemarks) strLotRemarks = "";
+				strLotRemarks = strLotRemarks.replace(/[']/g, " ");
+	 			
+			  	dojo.byId('LotNumber').innerHTML = strLotNumber;
+			  	dojo.byId('OwnerName').innerHTML = strOwnerFullName;
+				dojo.byId('BookPage').innerHTML = strBookPage;
+				dojo.byId('LotRemarks').innerHTML = strLotRemarks;
+				dojo.byId('Location').innerHTML = strLotLocation;
+				dojo.byId('TotalGraves').innerHTML = TotalGraves;
+				dojo.byId('GravesAvailable').innerHTML = GravesAvailable; 
+				
+				
+				  // Query Related Table
+				  QueryRelatedBurials_diagram(fset.features[0].attributes[lotFields.OID]);
+			 // }
+		  }
+		  // No results returned
+		  else {
+			
+			  HideProgressIndicator();
+			  alert(messages.getElementsByTagName("notfoundQueryLotLayerById")[0].childNodes[0].nodeValue)
+		  }
+
+	  }, function(){
+		 
+		  HideProgressIndicator();
+		  alert(messages.getElementsByTagName("errorQueryLotLayerById")[0].childNodes[0].nodeValue);
+	  });	  
+  }
+  
+
+// Function: QueryRelatedBurials_diagram
+// Description:  Finds Related Table Records to first item of feature set
+function QueryRelatedBurials_diagram(LotOID){
+
+	// Define Relationship Query
+	var relatedTopsQuery = new esri.tasks.RelationshipQuery();
+	relatedTopsQuery.outFields = ["*"];
+	relatedTopsQuery.relationshipId = graveRelateId;
+	relatedTopsQuery.objectIds = [LotOID];
+	relatedTopsQuery.returnGeometry = true;
+
+	// Execute Query
+	//console.log("Execute queryRelatedBurials");
+	LotFeatureLayer.queryRelatedFeatures(relatedTopsQuery, function(relatedRecords) {
+		
+		var fset = relatedRecords[LotOID];
+		// Get Lot Info from First Record 
+		if (fset.features.length > 0){
+			// Push results into array
+			GravesArray = [];
+			for (var i = 0, il = fset.features.length; i < il; i++) {
+				GravesArray.push(fset.features[i].attributes); //append each attribute list as item in store
+			}
+			GenerateLotDiagram();
+		}
+			
+			HideProgressIndicator();
+
+	}, function(){
+
+		HideProgressIndicator();
+		alert(messages.getElementsByTagName("errorQueryRelatedBurials")[0].childNodes[0].nodeValue);
+	});	 
+}
+
+
+
+
+
+	// Formats Query Result Attributes into Report
+	function GenerateLotDiagram(){
+		//Organize Results 
+		var strGraveID;
+		var strLastName = "";
+		var strFirstName = "";
+		var strBurialDate = "";
+		var strVet = "";
+		var strLeft;
+		var strRight;
+		var intLength;
+		var intID;
+		var strLetterCode
+		var Grave;
+		var pGraveClass;
+		var GraveClasses;
+			
+		var blnExists;
+		//var i:int;
+		
+		if (GravesArray != null) {
+			GraveClasses = new Array();
+			// Do for each record in Query Results....
+			for (var j = 0; j < GravesArray.length; j++) {
+				//for each(Grave in GravesArray){
+				// Get record values
+				Grave = GravesArray[j];
+				strGraveID = Grave.Grave_Number;
+				if (null == strGraveID || "Null" == strGraveID || "null" == strGraveID) 
+					strGraveID = "";
+				
+				// Do not process grave if no ID exists!
+				if (strGraveID != "") {
+				
+				
+					strLastName = Grave.Deceased_Last;
+					if (null == strLastName || "Null" == strLastName || "null" == strLastName) 
+						strLastName = "";
+					
+					strFirstName = Grave.Deceased_First;
+					if (null == strFirstName || "Null" == strFirstName || "null" == strFirstName) 
+						strFirstName = "";
+					if (strFirstName != "") 
+						strLastName = strFirstName + " " + strLastName;
+					
+					strBurialDate = Grave.BurialDate;
+					if (null == strBurialDate || "Null" == strBurialDate || "null" == strBurialDate) 
+						strBurialDate = "";
+					else 
+						strBurialDate = formatDate(strBurialDate);
+					
+					strVet = Grave.Veteran;
+					if (null == strVet || "Null" == strVet || "null" == strVet) strVet = ""; 
+					if (strVet.toLowerCase() == "yes") {
+						strBurialDate = strBurialDate + "  Veteran"
+					}
+					else 
+						strVet = "";
+					
+					//Parse Grave ID into Number & Letter Code
+					intLength = 1;
+					strLeft = strGraveID.substr(0, intLength)
+					while ((is_numeric(strLeft)) && (intLength < strGraveID.length)) {
+						intLength = intLength + 1;
+						strLeft = strGraveID.substr(0, intLength);
+					}
+					
+					strLeft = strGraveID.substr(0, intLength - 1);
+					strRight = strGraveID.substr(intLength - 1, strGraveID.length - (intLength - 1));
+					intID = Number(strLeft);
+					
+					blnExists = false;
+					//Insert into existing Grave Class or create new
+					if (GraveClasses.length == 0) {
+						pGraveClass = new GraveClass(intID, strRight, strGraveID, strLastName, strBurialDate);
+						GraveClasses.push(pGraveClass);
+					}
+					else {
+						var pGrave
+						for (var i = 0; i < GraveClasses.length; i++) {
+							//	for each(pGrave in GraveClasses){
+							pGrave = GraveClasses[i];
+							if (intID == pGrave.NumberCode) {
+								pGrave.AddToExistingGrave(strRight, strGraveID, strLastName, strBurialDate);
+								blnExists = true;
+								break;
+							}
+						}
+						if (!blnExists) {
+							pGraveClass = new GraveClass(intID, strRight, strGraveID, strLastName, strBurialDate);
+							GraveClasses.push(pGraveClass);
+						}
+					}
+				}
+			}
+			
+			if (GraveClasses.length > 0){
+			
+			//Sort Graves by leading digits of GraveID
+			GraveClasses.sort(sortbycode);
+			
+			// Create Controls for each grave.
+			var intStartIndex;
+			var txtGrave;
+			//var hboxGrave:HBox;
+			var newRow;
+			var newCell;
+			var gravetable;
+			
+			var formattedarray;
+			var burialarray;
+			
+			// Special case for zero level grave
+			if (GraveClasses[0].NumberCode == 0) { //Check for Zero Grave
+				// Create Zero Grave
+				gravetable = dojo.byId('zeroDataTable')
+				formattedarray = GraveClasses[0].GenerateGraveControl();
+				for (var i = 0; i < formattedarray.length; i++) {
+					//for each(burialarray in formattedarray){
+					burialarray = formattedarray[i];
+					newRow = gravetable.insertRow(gravetable.rows.length);
+					
+					// Insert each item from Burial Array & format cell
+					newCell = newRow.insertCell(0);
+					
+					newCell.style.fontWeight = "bold";
+					newCell.innerHTML = burialarray[0]; // Grave ID
+					newCell = newRow.insertCell(1);
+					
+					newCell.innerHTML = burialarray[1]; // Name
+					newCell = newRow.insertCell(2);
+					
+					newCell.innerHTML = burialarray[2]; // Date
+				}
+				gravetable.style.display = "block";
+				intStartIndex = 1
+			}
+			else 
+				intStartIndex = 0;
+			
+			// Calculate Number of rows.... Max is 10
+			var intMidPoint;
+			intMidPoint = Math.ceil(((GraveClasses.length + intStartIndex) / 2)) - 1;
+			if (intMidPoint > MaxTableRows) 
+				intMidPoint = MaxTableRows;
+			
+			var int2ndHalfIndex, strLeftTable, strRightTable;
+			var intTableIndex = 1;
+			
+			if (GraveClasses.length > 1 || (GraveClasses.length == 1 && intStartIndex == 0)) {
+				gravetable = dojo.byId("frontrearTable");
+				gravetable.style.display = "block";
+			}
+			// Create set of controls for each grave
+			for (var j = intStartIndex; j <= intMidPoint; j++) {
+				int2ndHalfIndex = (j + intMidPoint - intStartIndex + 1);
+				strLeftTable = intTableIndex + "leftTable";
+				strRightTable = intTableIndex + "rightTable";
+				
+				if (int2ndHalfIndex < GraveClasses.length) {
+					gravetable = dojo.byId(strRightTable)
+					formattedarray = GraveClasses[int2ndHalfIndex].GenerateGraveControl();
+					
+					for (var i = 0; i < formattedarray.length; i++) {
+						//for each(burialarray in formattedarray){
+						burialarray = formattedarray[i];
+						newRow = gravetable.insertRow(gravetable.rows.length);
+						
+						// Insert each item from Burial Array & format cell
+						newCell = newRow.insertCell(0);
+						newCell.style.fontWeight = "bold";
+						newCell.innerHTML = burialarray[0]; // Grave ID
+						newCell = newRow.insertCell(1);
+						newCell.innerHTML = burialarray[1]; // Name
+						newCell = newRow.insertCell(2);
+						newCell.innerHTML = burialarray[2]; // Date
+					}
+					gravetable.style.display = "block";
+				}
+				
+				gravetable = dojo.byId(strLeftTable)
+				formattedarray = GraveClasses[j].GenerateGraveControl();
+				
+				for (var i = 0; i < formattedarray.length; i++) {
+					//for each(burialarray in formattedarray){
+					burialarray = formattedarray[i];
+					newRow = gravetable.insertRow(gravetable.rows.length);
+					
+					// Insert each item from Burial Array & format cell
+					newCell = newRow.insertCell(0);
+					
+					newCell.innerHTML = burialarray[0]; // Grave ID
+					newCell.style.fontWeight = "bold";
+					newCell = newRow.insertCell(1);
+					newCell.innerHTML = burialarray[1]; // Name
+					newCell = newRow.insertCell(2);
+					newCell.innerHTML = burialarray[2]; // Date
+				}
+				gravetable.style.display = "block";
+				intTableIndex = intTableIndex + 1;
+				
+			}
+			}
+		}
+	}	
+	
+	function is_numeric(InputString) {
+		if (!isNaN(Number(InputString))) {
+			return true;
+		}
+		return false;
+	}
+
+ 	dojo.addOnLoad(doContent);
+ </script>
+
+<body>  
+	 <div id="divLogo" class="divLogo">
+			<table style="width: 100%;">
+				<tr>
+					<td><img id="imgApplication" class="imgApplication" src="images/logo.png" /></td>
+				</tr>
+			</table>
+		</div>
+	<div id="container">
+		
+
+	<div id="header" class="divApplicationHeader">
+			<table cellpadding="0" cellspacing="0" class="tableHeader">
+				<tr>
+					<td id="lblAppName" class="lblAppName" align="left" style="color: Black;" valign="center">Brookdale Cemetery</td>
+					<td align="right">
+					
+				</tr>
+			</table>
+		
+	</div>
+
+
+<div id="content" class="divContentPane" >	
+	<table width="50%" style="font-size:16px">
+		 <tr><td width=100% align="center"><strong>Lot Diagram</strong></td></tr>
+		   <tr/>
+	</table>
+	<table width="100%" id='textTable' style="font-size:14px">
+	  <tr><td width="10%">Lot Number</td><td  width="15%" id='LotNumber'></td><td width="10%">Location</td><td width="25%" id='Location'></td> <td></td></tr>
+	  <tr><td>Owner</td><td  id='OwnerName'></td><td>Total Graves</td><td  id='TotalGraves'></td> <td></td></tr>
+	  <tr><td>Book/Page</td><td  id='BookPage'></td><td>Graves Available</td><td  id='GravesAvailable'></td> <td></td></tr>
+	  
+		<tr/>
+	</table>
+	<table width="100%" id='lotremarksTable' style="font-size:12px">
+   
+	   <tr ><td width="10%" >Remarks</td><td  width="40%" id='LotRemarks'></td> <td></td></tr>
+		  <tr/>
+	</table>
+	
+	<table id="zeroTable" style="font-size:12px" >
+		<tr>
+			<td align="left">
+				<table id="zeroSpacerTable" style.emptyCells="true"><tr><td width="155px"></td></tr></table>
+			</td> 
+			<td align="left">
+				<table id="zeroDataTable" frame="border" style="display:none"><tr><td width="25px" ></td><td width="200px"></td><td width="175px"></td></tr></table>
+			</td> 
+		</tr>   
+	</table>
+	<table id="frontrearTable" style="font-size:14px;display:none;" >
+		<tr>
+			<td width="400px" align="center">FRONT</td><td width="400px" align="center">REAR</td>
+		</tr>
+	   
+	</table>
+	<table id="oneTable" style="font-size:12px">
+		<tr valign="top">
+			<td align="left">
+				<table id="1rightTable" frame="border" style="display:none"><tr><td width="25px"></td> <td width="200px"/td> <td width="175px"></td> </tr></table>
+			</td> 
+			<td align="left">
+				<table id="1leftTable" frame="border" style="display:none"><tr><td width="25px"/td> <td width="200px"/td> <td width="175px"/td> </tr></table>
+			</td> 
+		</tr>   
+	</table>
+	<table id="twoTable" style="font-size:12px">
+		<tr>
+			<td align="left">
+				<table id="2rightTable" frame="border" style="display:none"><tr><td width="25px"/td> <td width="200px"/td> <td width="175px"/td> </tr></table>
+			</td> 
+			<td align="left">
+				<table id="2leftTable" frame="border" style="display:none"><tr><td width="25px"/td> <td width="200px"/td> <td width="175px"/td> </tr></table>
+			</td> 
+		</tr>   
+	</table>
+	<table id="threeTable" style="font-size:12px" >
+		<tr>
+			<td align="left">
+				<table id="3rightTable" frame="border" style="display:none"><tr><td width="25px"/td> <td width="200px"/td> <td width="175px"/td> </tr></table>
+			</td> 
+			<td align="left">
+				<table id="3leftTable" frame="border" style="display:none"><tr><td width="25px"/td> <td width="200px"/td> <td width="175px"/td> </tr></table>
+			</td> 
+		</tr>   
+	</table>
+	<table id="fourTable" style="font-size:12px">
+		<tr>
+			<td align="left">
+				<table id="4rightTable" frame="border" style="display:none"><tr><td width="25px" ></td><td width="200px"/td><td width="175px"/td></tr></table>
+			</td> 
+			<td align="left">
+				<table id="4leftTable" frame="border" style="display:none"><tr><td width="25px" ></td><td width="200px"/td><td width="175px"/td></tr></table>
+			</td> 
+		</tr>   
+	</table>
+	<table id="fiveTable" style="font-size:12px">
+		<tr>
+			<td align="left">
+				<table id="5rightTable" frame="border" style="display:none"><tr><td width="25px" ></td><td width="200px"/td><td width="175px"/td></tr></table>
+			</td> 
+			<td align="left">
+				<table id="5leftTable" frame="border" style="display:none"><tr><td width="25px" ></td><td width="200px"/td><td width="175px"/td></tr></table>
+			</td> 
+		</tr>   
+	</table>
+	<table id="sixTable" style="font-size:12px">
+		<tr>
+			<td align="left">
+				<table id="6rightTable" frame="border" style="display:none"><tr><td width="25px" ></td><td width="200px"></td><td width="175px"/td></tr></table>
+			</td> 
+			<td align="left">
+				<table id="6leftTable" frame="border" style="display:none"><tr><td width="25px" ></td><td width="200px"></td><td width="175px"/td></tr></table>
+			</td> 
+		</tr>   
+	</table>
+	<table id="sevenTable" style="font-size:12px">
+		<tr>
+			<td align="left">
+				<table id="7rightTable" frame="border" style="display:none"><tr><td width="25px" ></td><td width="200px"></td><td width="175px"/td></tr></table>
+			</td> 
+			<td align="left">
+				<table id="7leftTable" frame="border" style="display:none"><tr><td width="25px" ></td><td width="200px"></td><td width="175px"/td></tr></table>
+			</td> 
+		</tr>   
+	</table>
+	<table id="eightTable" style="font-size:12px">
+		<tr>
+			<td align="left">
+				<table id="8rightTable" frame="border" style="display:none"><tr><td width="25px" ></td><td width="200px"></td><td width="175px"/td></tr></table>
+			</td> 
+			<td align="left">
+				<table id="8leftTable" frame="border" style="display:none"><tr><td width="25px"  ></td><td width="200px"></td><td width="175px"/td></tr></table>
+			</td> 
+		</tr>   
+	</table>
+	<table id="nineTable" style="font-size:12px">
+		<tr>
+			<td align="left">
+				<table id="9rightTable" frame="border" style="display:none"><tr><td width="25px" ></td><td width="200px"></td><td width="175px"/td></tr></table>
+			</td> 
+			<td align="left">
+				<table id="9leftTable" frame="border" style="display:none"><tr><td width="25px" ></td><td width="200px"></td><td width="175px"/td></tr></table>
+			</td> 
+		</tr>   
+	</table>
+	<table id="tenTable" style="font-size:12px">
+		<tr>
+			<td align="left">
+				<table id="10rightTable" frame="border" style="display:none"><tr><td width="25px"/td><td width="200px"/td><td width="175px"/td></tr></table>
+			</td> 
+			<td align="left">
+				<table id="10leftTable" frame="border" style="display:none" ><tr><td width="25px"/td><td width="200px"/td><td width="175px"/td></tr></table>
+			</td> 
+		</tr>   
+	</table> 
+	 <table id="LegendTable" frame="border" style="font-size:12px" >
+		<tr >
+			<td   width="800px" >
+				S - Single Depth   A,B,C,E - ashes   Grave 0 (if any) is at monument
+			</td> 
+		</tr> 
+		<tr>
+			<td>
+				D - double depth   Other - unclassified
+			</td> 
+		</tr>   
+   </table>
+    </div>
+   
+
+</div>
+	<div id="divLoadingIndicator" class="divLoadingIndicator" style="display: none;">
+			<table style="width: 100%; height: 100%;">
+				<tr align="center" valign="middle">
+					<td><img src="images/loader.gif" /></td>
+				</tr>
+			</table>
+		</div>
+  </body>
+  
+</html>

@@ -1,20 +1,4 @@
-﻿/*
- | Version 10.2
- | Copyright 2012 Esri
- |
- | Licensed under the Apache License, Version 2.0 (the "License");
- | you may not use this file except in compliance with the License.
- | You may obtain a copy of the License at
- |
- |    http://www.apache.org/licenses/LICENSE-2.0
- |
- | Unless required by applicable law or agreed to in writing, software
- | distributed under the License is distributed on an "AS IS" BASIS,
- | WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- | See the License for the specific language governing permissions and
- | limitations under the License.
- */
-/* This file contains the tablet specific style settings for "Election Results" template */
+﻿/* This file contains the tablet specific style settings for "Election Results" template */
 /* The common settings for the styles are defined in "electionresults.css" */
 
 /* Use this file to perform the following: */
@@ -26,7 +10,7 @@
                                                                           divParcelDataScrollContainer,divFeatureDataScrollbarContainer,divBroadbandContainer,
                                                                          .divNeighborhoodContainer,divParcelScrollContent, .divNeighborhoodContent,
                                                                          .divBroadbandContent,divFeatureDataScrollbarContent}*/
-/* 5.  Set styles for tab container              - { Style(s) to look for: mblTabBarButton}*/
+/* 5.  Set styles for tab container              - { Style(s) to look for: mblTabButton}*/
 /* 6.  Set styles for esri slider                - { Style(s) to look for: esriSimpleSlider}*/
 /* 7.  Set styles for basemap                    - { Style(s) to look for: basemapThumbnail,baseMapContainerNode,divLayerContainer}*/
 
@@ -86,7 +70,6 @@ html, body, .textarea
 .divApplicationHeader
 {
     z-index: 10001;
-    height: 60px !important;
 }
 /*--------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
 
@@ -139,11 +122,6 @@ html, body, .textarea
     height: 20px;
 }
 
-.text
-{
-font-size:14px !important;
-}
-
 /*Styles for infowindow*/
 
 .divItemsContainer
@@ -168,7 +146,7 @@ font-size:14px !important;
 
 .divParcelDataScrollContainer
 {
-    height: 170px;
+    height: 180px;
     position: relative;
     width: 325px;
 }
@@ -180,14 +158,14 @@ font-size:14px !important;
 }
 .divBroadbandContainer, .divNeighborhoodContainer
 {
-    height: 170px;
+    height: 180px;
     position: relative;
     width: 325px;
 }
 
 .divParcelScrollContent, .divNeighborhoodContent, .divBroadbandContent
 {
-    height: 170px;
+    height: 180px;
     position: relative;
     width: 325px;
     overflow: hidden;
@@ -209,9 +187,10 @@ font-size:14px !important;
 
 /*Styles for tab container*/
 
-.mblTabBarButton
+.mblTabButton
 {
-    width: 105px;
+    /*width: 95px;*/
+    width: 105px; /*  min-width: 95px;*/
     min-width: 80px;
     max-width: 195px;
     border-top-style: none;
@@ -251,9 +230,3 @@ font-size:14px !important;
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
-.divLayers
-{
-       max-height:300px;
-       width:93%;
-       overflow:hidden;
-}

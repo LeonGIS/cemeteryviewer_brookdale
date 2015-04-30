@@ -1,48 +1,25 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<!--
- | Version 10.2
- | Copyright 2012 Esri
- |
- | Licensed under the Apache License, Version 2.0 (the "License");
- | you may not use this file except in compliance with the License.
- | You may obtain a copy of the License at
- |
- |    http://www.apache.org/licenses/LICENSE-2.0
- |
- | Unless required by applicable law or agreed to in writing, software
- | distributed under the License is distributed on an "AS IS" BASIS,
- | WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- | See the License for the specific language governing permissions and
- | limitations under the License.
--->
+﻿<?xml version="1.0" encoding="utf-8" ?>
 <Messages>
-    <blankParcel>Enter an Address or Parcel ID to search.</blankParcel>
-    <unableToLocateParcel>Parcel not found at specified location.</unableToLocateParcel>
-    <createPropertyReportOrMap>Please create a property report or property map.</createPropertyReportOrMap>
-    <selectParcel>Please select a parcel.</selectParcel>
-    <propertyReportAdded>Property report added to the cart.</propertyReportAdded>
-    <propertyMapAdded>Property map added to the cart.</propertyMapAdded>
-    <selectMapLayout>Please select a map layout.</selectMapLayout>
-    <enterMapTitle>Please enter a map title.</enterMapTitle>
-    <submittedSuccessfully>Submitted successfully.</submittedSuccessfully>
-    <submitFailed>An error occurred while submitting the feedback.</submitFailed>
-    <invalidValidationCode>Invalid Validation Code.</invalidValidationCode>
-    <outsideArea>You are currently outside the supported area.</outsideArea>
-    <timeOut>The browser is unable to supply a position at this time.</timeOut>
-    <positionUnavailable>Position unavailable.</positionUnavailable>
-    <permissionDenied>Permission denied.</permissionDenied>
-    <tinyURLEngine>Bitly API is not able to generate tiny URL.</tinyURLEngine>
-    <unknownError>Unknown error.</unknownError>
-    <alreadyAddedParcelId>This Parcel ID has already been added to the cart.</alreadyAddedParcelId>
-    <selectOneParcel>Please select at least one parcel to shop.</selectOneParcel>
-    <selectArea>Please select an area.</selectArea>
-    <selectFeedbackType>Please select feedback type.</selectFeedbackType>
-    <enterComments>Please enter comments.</enterComments>
-    <commentsExceeds>Comment should not exceed 255 characters.</commentsExceeds>
-    <enterName>Please enter name.</enterName>
-    <nameProvisions>Name accepts alphabets, space, ".", "-" and should not be more than 150 characters.</nameProvisions>
-    <enterPhoneNumber>Please enter phone number.</enterPhoneNumber>
-    <enterValidPhone>Please enter 10 digit phone number.</enterValidPhone>
-    <enterMail>Please enter email address.</enterMail>
-    <enterValidMail>Please enter valid email address.</enterValidMail>
+  <unableToLocateParcel>Parcel not found at specified location.</unableToLocateParcel>
+  <createPropertyReportOrMap>Please create a property report or property map.</createPropertyReportOrMap>
+  <selectParcel>Please select a parcel.</selectParcel>
+  
+  <outsideArea>You are currently outside the supported area.</outsideArea>
+  <timeOut>The browser is unable to supply a position at this time.</timeOut>
+  <positionUnavailable>Position unavailable.</positionUnavailable>
+  <permissionDenied>Permission denied.</permissionDenied>
+  <tinyURLEngine>Bitly API is not able to generate tiny URL.</tinyURLEngine>
+  <unknownError>Unknown error.</unknownError>
+  
+  
+  <blankName>Enter a name to search.</blankName>
+  <notfoundQueryLotLayer>Lot not found at specified location</notfoundQueryLotLayer>
+  <errorQueryLotLayer>Error occurred searching for lot on map. Please try again.</errorQueryLotLayer>
+  <errorQueryRelatedBurials>Error occured retrieving burial information. Please try again.</errorQueryRelatedBurials>
+  
+  <notfoundQueryLotLayerById>Selected burial lot not found.</notfoundQueryLotLayerById>
+  <errorQueryLotLayerById>Error occured searching for Lot. Please try again.</errorQueryLotLayerById>
+  <notfoundQueryBurialTable>Name did not return any results.</notfoundQueryBurialTable>
+  <errorQueryBurialTable>Error occured searching by name. Please try again.</errorQueryBurialTable>
+  
 </Messages>

@@ -1,772 +1,457 @@
 ﻿<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <meta charset=utf-8>
-    <!--
-     | Version 10.2
-     | Copyright 2012 Esri
-     |
-     | Licensed under the Apache License, Version 2.0 (the "License");
-     | you may not use this file except in compliance with the License.
-     | You may obtain a copy of the License at
-     |
-     |    http://www.apache.org/licenses/LICENSE-2.0
-     |
-     | Unless required by applicable law or agreed to in writing, software
-     | distributed under the License is distributed on an "AS IS" BASIS,
-     | WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-     | See the License for the specific language governing permissions and
-     | limitations under the License.
-    -->
-    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>Tax Parcel Viewer</title>
-    <link rel="shortcut icon" href="images/taxparcel.ico" />
-    <link rel="stylesheet" href="//js.arcgis.com/3.11/dojox/mobile/themes/iphone/iphone.css" />
-    <link rel="stylesheet" href="//js.arcgis.com/3.11/esri/css/esri.css" />
-    <link href="styles/taxParcel.css" rel="stylesheet" type="text/css" />
-    <link rel="Stylesheet" id="dynamicStyleSheet" />
-    <link rel="apple-touch-icon" href="images/taxparcel.png" />
-    <script type="text/javascript">
-     var dojoConfig = {
-            async: false,
-            parseOnLoad: true,
-            mblHideAddressBar: false,
-            packages:[
-                {name:"js",location:location.pathname.replace(/\/[^/]+$/, '') + '/js'}
-            ]
-        };
-    </script>
-    <script type="text/javascript" src="//js.arcgis.com/3.11/"></script>
-    <script src="js/modernizr-2.5.3.js" type="text/javascript"></script>
-    <script src="js/infoWindow.js" type="text/javascript"></script>
-    <script src="js/basemapGallery.js" type="text/javascript"></script>
-    <script src="js/utils.js" type="text/javascript"></script>
-    <script src="js/locator.js" type="text/javascript"></script>
-    <script src="js/parsewebmap.js" type="text/javascript"></script>
-    <script src="js/homePage.js" type="text/javascript"></script>
-</head>
-<body onorientationchange="OrientationChanged();">
-    <div id="mapView" style="width: 100%; height: 100%;">
-        <div id="map" style="width: 100%; height: 100%;">
-        </div>
-    </div>
-    <div id="divLogo" class="divLogo">
-        <table style="width: 100%;">
-            <tr>
-                <td>
-                    <img id="imgApplication" class="imgApplication" src="images/logo.png" />
-                </td>
-            </tr>
-        </table>
-    </div>
-    <div class="divApplicationHeader" align="right">
-        <table cellpadding="0" cellspacing="0" class="tableHeader">
-            <tr>
-                <td id="lblAppName" class="lblAppName" align="left" style="color: White;">
-                </td>
-                <td align="right">
-                    <table>
-                        <tr>
-                            <td align="center" align="left" id="tdsearch" class="tdHeader">
-                                <img alt="Settings" src="images/locate.png" class="imgOptions" title="Search Parcel"
-                                    onclick="ShowSearchPanel();" />
-                            </td>
-                            <td align="center" align="left" id="tdGPS" class="tdHeader">
-                                <img src="images/gps.png" class="imgOptions" title="Locate" onclick="ShowMyLocation()" />
-                            </td>
-                            <td align="center" align="left" class="tdHeaderMobile">
-                                <img src="images/pdf.png" class="imgOptions" title="Create report" onclick="CreatePropertyReport();">
-                            </td>
-                            <td align="center" align="left" class="tdHeaderMobile" id="tdParcelMarkUp">
-                                <img src="images/comments.png" class="imgOptions" title="Submit feedback" onclick="ShowFeedback();" />
-                            </td>
-                            <td align="center" align="left" id="tdBaseMap" class="tdHeader">
-                                <img src="images/basemap.png" id="imgBaseMap" class="imgOptions" title="Switch Basemap"
-                                    onclick="ShowBaseMaps();" />
-                            </td>
-                            <td align="center" align="left" class="tdHeader">
-                                <img src="images/share.png" class="imgOptions" title="Share map" onclick="ShareLink(true);" />
-                            </td>
-                            <td id="tcShoppingCartContainer" align="center" align="left" class="tdHeaderMobile">
-                                <img src="images/shop.png" title="Download Reports and Maps" class="imgOptions" onclick="ShowShoppingCartContainer();" />
-                            </td>
-                            <td align="center" align="left" id="help" class="tdHeader">
-                                <img src="images/help.png" title="Help" class="imgOptions" />
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-        </table>
-    </div>
-    <div id="divSplashScreenContainer" class="divSplashScreenContainer" style="display: none;">
-        <table style="width: 100%; height: 100%;">
-            <tr align="center" valign="middle">
-                <td>
-                    <div id="divSplashScreenDialog" class="hideContainer divSplashScreenDialog">
-                        <table style="width: 100%;">
-                            <tr>
-                                <td>
-                                    <div id="divSplashContainer" class="divSplashContainer" style="margin-top: 10px;">
-                                        <div id="divSplashContent" class="divSplashContent">
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td align="center">
-                                    <div style="width: 75px;" class="customButton" onclick="HideSplashScreenMessage();">
-                                        <div class="customButtonInner">
-                                            <table style="width: 100%; height: 100%;">
-                                                <tr>
-                                                    <td align="center" valign="middle">
-                                                        OK
-                                                    </td>
-                                                </tr>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
-                </td>
-            </tr>
-        </table>
-    </div>
-    <div id="divAddressContainer" class=" opacityHideAnimation divAddressContainer" align="center"
-        style="display: none;">
-        <table style="width: 100%; height: 100%;">
-            <tr align="center" valign="middle">
-                <td>
-                    <div id="divAddressContent" class="showContainer divAddressContent">
-                        <table class="tblHeader" style="width: 100%;">
-                            <tr style="height: 30px;" align="center" valign="top">
-                                <td style="width: 5px;">
-                                </td>
-                                <td class="tdHeading" align="left" valign="middle">
-                                    Search
-                                </td>
-                                <td style="width: 25px;">
-                                    <img src="images/close.png" class="imgOptions" title="Close" onclick="HideAddressContainer();" />
-                                </td>
-                            </tr>
-                        </table>
-                        <div id="divAddressResultContainer" class="divAddressResultContainer" style="width: 90%;">
-                        </div>
-                    </div>
-                </td>
-            </tr>
-        </table>
-    </div>
-    <div id="divLayerContainer" class="hideContainerHeight divLayerContainer">
-        <div id="divLayerContentHolder" class="divLayerContentHolder">
-            <table>
-                <tr>
-                    <td align="center">
-                        <div id="layerList" class="layerList">
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <table id="tblLayers" style="width: 100%;">
-                            <tr>
-                                <td style="width: 50px;">
-                                    Layers
-                                </td>
-                                <td>
-                                    <hr />
-                                </td>
-                            </tr>
-                        </table>
-                        <div id="divScrollContent" style="position: relative; overflow: hidden;">
-                        <div id="divLayers" class="divLayers">
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-            </table>
-        </div>
-    </div>
-    <div id="divShareContainer" class="hideContainerHeight divShareContainer">
-        <div class="divLayerContentHolder" style="height: 100%;">
-            <table cellpadding="0" cellspacing="0">
-                <tr>
-                    <td>
-                        <table cellpadding="2" cellspacing="2">
-                            <tr>
-                                <td align="center" colspan="3" style="color: #F5F5DC;">
-                                    Share this map
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="width: 30px;" align="center">
-                                    <img title="Facebook" class="imgShare" src="images/img_facebook.png" onclick="Share('facebook');" />
-                                </td>
-                                <td style="width: 30px;" align="center">
-                                    <img title="Twitter" class="imgShare" src="images/img_twitter.png" onclick="Share('twitter');" />
-                                </td>
-                                <td style="width: 30px;" align="center">
-                                    <img title="Email" class="imgShare" src="images/img_email.png" onclick="Share('email');" />
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-            </table>
-        </div>
-    </div>
-    <table id="tblAddressSearch" class="tblAddressSearch" style="color: #fff; width: 100%;">
-        <tr>
-            <td>
-                <table style="margin-top: 10px; width: 100%;">
-                    <tr>
-                        <td width="5%">
-                            Search
-                        </td>
-                        <td>
-                        </td>
-                        <td>
-                            <div id="divAddressPlaceHolder" class="divAddressPlaceHolder">
-                                <input type="text" id="txtAddress" class="txtAddress" readonly="readonly" />
-                                <img src="images/locate.png" id="imgLocate" class="imgLocate" title="Search" onclick="LocateAddress();" />
-                            </div>
-                        </td>
-                    </tr>
-                </table>
-                <div id="divAddressHeader">
-                </div>
-                <table id="tblSearchInfo" style="margin-top: 10px;">
-                    <tr>
-                        <td>
-                            Find current location or search for Parcel ID, Address or Subdivision/Condo Name.
-                        </td>
-                    </tr>
-                    <tr>
-                    </tr>
-                    <tr>
-                    </tr>
-                    <tr>
-                        <td>
-                            You can also interact directly with the map and click on parcels to get information.
-                        </td>
-                    </tr>
-                    <tr>
-                    </tr>
-                    <tr>
-                    </tr>
-                    <tr>
-                        <td id="tdHelp">
-                            See the Help document if you are just getting started.
-                        </td>
-                    </tr>
-                </table>
-                <div id="divAddressList" class="divAddressList">
-                    <div id="divAddressScrollContainer" class="divAddressScrollContainer">
-                        <div id="divAddressScrollContent" class="divAddressScrollContent">
-                            <table id="tblAddressResults" class="tblAddressResults">
-                            </table>
-                        </div>
-                    </div>
-                </div>
-                <table style="height: 100%; width: 100%;">
-                    <tr>
-                        <td align="center">
-                            <img id="imgSearchLoader" src="images/loader.gif" class="imgSearchLoader" />
-                        </td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
-    </table>
-    <div id="divSidePanel" class="divSidePanel">
-        <div id="divDataContainer" class="divDataContainer">
-            <div id="divAddressSearch" class="divAddressSearch" style="padding-top: 55px;">
-            </div>
-            <div id="divFeedback" class="divFeedback" style="display: none; padding-top: 75px;
-                background-color: #585858">
-                <table>
-                    <tr>
-                        <td>
-                            We strive to provide accurate and timely access to property information and your
-                            feedback is important to us.
-                        </td>
-                    </tr>
-                </table>
-                <br />
-                <br />
-                <table style="margin-left: 10px;">
-                    <tr>
-                        <td style="width: 110px;">
-                            Feedback On:
-                        </td>
-                        <td valign="middle">
-                            <div id="divDropDownContainer" class="divDropDownContainer">
-                                <input type="text" id="txtSelectedRequest" class="txtSelectedRequest" readonly="readonly"
-                                    onclick="ToggleRequestTypesList();" />
-                                <img src="images/DropDown.png" id="imgDropdownCarot" class="imgDropdownCarot" onclick="ToggleRequestTypesList();" />
-                            </div>
-                            <div id="divSelectedRequest" class="divRequestTypes">
-                            </div>
-                        </td>
-                    </tr>
-                </table>
-                <br />
-                <br />
-                <table style="margin-left: 10px;">
-                    <tr id="trDrawFeedback" class="trDrawFeedback">
-                        <td style="width: 110px;">
-                            Where?
-                        </td>
-                        <td>
-                            <div style="width: 75px; margin-top: 0px;" class="customButton" onclick="startDrawingFeedback(this);">
-                                <div class="customButtonInner">
-                                    <table style="width: 100%; height: 100%;">
-                                        <tr>
-                                            <td id="btnDrawFeedback" class="btnDrawFeedback" align="center" valign="middle">
-                                                Draw
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr id="trDraw" class="trDraw" style="display: none">
-                        <td>
-                            Draw your area of concern on the map
-                        </td>
-                    </tr>
-                </table>
-                <br />
-                <table style="margin-left: 10px; width: 95%;">
-                    <tr>
-                        <td>
-                            Detailed comments
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <textarea id="txtComment" class="textarea" placeholder="Enter comments" maxlength="250"
-                                onkeypress="if(dojo.isIE){return ImposeMaxLength(this, 249);}else{return ImposeMaxLength(this, 250);}"></textarea>
-                        </td>
-                    </tr>
-                </table>
-                <hr />
-                <table style="margin-left: 10px;">
-                    <tr>
-                        <td>
-                            Would you like to be contacted?
-                        </td>
-                    </tr>
-                </table>
-                <table style="margin-left: 20px; width: 95%;">
-                    <tr>
-                        <td>
-                            Name:
-                        </td>
-                        <td>
-                            <input type="text" id="txtName" class="text" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            Phone:
-                        </td>
-                        <td>
-                            <input type="text" id="txtPhone" class="text" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            Email:
-                        </td>
-                        <td>
-                            <input type="text" id="txtMail" class="text" />
-                        </td>
-                    </tr>
-                </table>
-                <hr />
-                <table style="width: 95%;">
-                    <tr>
-                        <td height="20" align="left" colspan="2">
-                            <span id="spanServiceErrorMessage" class="spanServiceErrorMessage" style="color: Yellow;
-                                display: none; margin-left: 10px;"></span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td align="right">
-                            <div style="width: 130px;" class="customButton" onclick="SubmitFeedback();">
-                                <div class="customButtonInner">
-                                    <table style="width: 100%; height: 100%;">
-                                        <tr>
-                                            <td align="center" valign="middle">
-                                                Submit
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </div>
-                            </div>
-                        </td>
-                        <td align="left">
-                            <div style="width: 125px;" class="customButton" onclick="CancelFeedBack();">
-                                <div class="customButtonInner">
-                                    <table style="width: 100%; height: 100%;">
-                                        <tr>
-                                            <td align="center" valign="middle">
-                                                Cancel
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                </table>
-            </div>
-            <div id="divCreatePropertyReport" class="divCreatePropertyReport" style="display: none;
-                padding-top: 75px; background-color: #585858;">
-                <table>
-                    <tr>
-                        <td>
-                            <b>Create Property Report</b>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                        </td>
-                    </tr>
-                </table>
-                <br />
-                <table>
-                    <tr>
-                        <td id="taxParcelIdMap">
-                        </td>
-                        <td id="tdParcelId">
-                        </td>
-                    </tr>
-                </table>
-                <br />
-                <br />
-                <br />
-                <br />
-                <table style="width: 95%;">
-                    <tr>
-                        <td align="right">
-                            <div class="customButton" style="width: 125px;" onclick="CreatePDF('PropertyReport');">
-                                <div class="customButtonInner">
-                                    <table style="width: 100%; height: 100%;">
-                                        <tr>
-                                            <td align="center" id="tdPropertyReport" valign="middle">
-                                                Add to cart
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </div>
-                            </div>
-                        </td>
-                        <td align="left">
-                            <div class="customButton" style="width: 125px;" onclick="CancelPdf();">
-                                <div class="customButtonInner">
-                                    <table style="width: 100%; height: 100%;">
-                                        <tr>
-                                            <td align="center" valign="middle">
-                                                Cancel
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                </table>
-                <br />
-                <br />
-                <br />
-                <hr />
-                <br />
-                <table>
-                    <tr>
-                        <td>
-                            <b>Create Property Map</b>
-                        </td>
-                    </tr>
-                </table>
-                <br />
-                <table>
-                    <tr>
-                        <td id="TaxParcelIdReport">
-                        </td>
-                        <td id="tdTaxParcelId">
-                        </td>
-                    </tr>
-                </table>
-                <br />
-                <table>
-                    <tr>
-                        <td width="110px">
-                            Select Layout:
-                        </td>
-                        <td valign="middle">
-                            <div class="divDropDownContainer">
-                                <input type="text" id="txtSelectedLayout" class="txtSelectedLayout" readonly="readonly"
-                                    onclick="ToggleSelectedLayoutList();" />
-                                <img src="images/DropDown.png" class="imgDropdownCarot" onclick="ToggleSelectedLayoutList();" />
-                            </div>
-                            <div id="divSelectedLayout" class="divRequestTypes">
-                                <div id="divLayoutconatiner" class="scrollbar_container">
-                                    <div id="divlayoutContent" class="scrollbar_content">
-                                    </div>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                </table>
-                <br />
-                <table>
-                    <tr>
-                        <td width="110px">
-                            Set Map Title:
-                        </td>
-                        <td>
-                            <input id="txtMapTitle" type="text" class="text" style="width: 200px;" />
-                        </td>
-                    </tr>
-                </table>
-                <br />
-                <br />
-                <table style="width: 95%;">
-                    <tr>
-                        <td align="right">
-                            <div style="width: 125px;" class="customButton" onclick="CreatePDF('PropertyMap');">
-                                <div class="customButtonInner">
-                                    <table style="width: 100%; height: 100%;">
-                                        <tr>
-                                            <td align="center" id="tdPropertyMap" valign="middle">
-                                                Add to cart
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </div>
-                            </div>
-                        </td>
-                        <td align="left">
-                            <div class="customButton" style="width: 125px;" onclick="CancelPdf();">
-                                <div class="customButtonInner">
-                                    <table style="width: 100%; height: 100%;">
-                                        <tr>
-                                            <td align="center" valign="middle">
-                                                Cancel
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                </table>
-            </div>
-            <div id="divShoppingCart" class="divShoppingCart" style="display: none; padding-top: 75px;
-                background-color: #585858;">
-                <table>
-                    <tr>
-                        <td>
-                            <b>Download Reports and Maps</b>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                        </td>
-                    </tr>
-                </table>
-                <br />
-                <br />
-                <br />
-                <div id="divSelectAll" class="divSelectAll">
-                    <table style="border-bottom: 1px solid white; width: 100%;">
-                        <tr>
-                            <td style="width: 20px; height: 20px;">
-                                <img src="images/checked.png" id="chkSelectAll" state="check" style="width: 15px;
-                                    height: 15px;" onclick="SelectAll(this);" />
-                            </td>
-                            <td style="text-align: left;">
-                                Select All
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-                <div id="divItemsContainer" class="divItemsContainer" style="border-bottom: 1px solid white;
-                    width: 100%;">
-                    <div id="divItemsContent" class="divItemsContent">
-                    </div>
-                </div>
-                <table style="border-bottom: 1px solid white; width: 100%;">
-                    <tr>
-                        <td align="center">
-                            <div id="divShoppingSummary" class="divShoppingSummary">
-                            </div>
-                        </td>
-                    </tr>
-                </table>
-                <table style="width: 95%;">
-                    <tr>
-                        <td style="width: 50%;" align="right">
-                            <img src="images/paypal.png" onclick="ShowPayPal();" id="imgPaypal" style="width: 110px;
-                                margin-top: 15px; cursor: pointer;" />
-                        </td>
-                        <td align="left">
-                            <div style="width: 100px;" class="customButton" onclick="CancelShopping();">
-                                <div class="customButtonInner">
-                                    <table style="width: 100%; height: 100%;">
-                                        <tr>
-                                            <td align="center" valign="middle">
-                                                Cancel
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                </table>
-                <table>
-                    <tr>
-                        <td>
-                            Validation Code:
-                        </td>
-                        <td>
-                            <input type="text" id="txtValidationCode" class="text" style="width: 190px;" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td align="center" colspan="2">
-                            <div class="customButton" style="width: 150px; margin-top: 10px;" onclick="ValidateRequest();">
-                                <div class="customButtonInner">
-                                    <table style="width: 100%; height: 100%;">
-                                        <tr>
-                                            <td align="center" valign="middle">
-                                                Download Reports
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                </table>
-            </div>
-        </div>
-    </div>
-    <div id="divFeatureInformation" align="center" class="opacityHideAnimation divFeatureInformation">
-        <table style="width: 100%; height: 100%;">
-            <tr align="center" valign="middle">
-                <td>
-                    <div id="divFeatureInfoWindow" class="hideContainer divFeatureInfoWindow">
-                        <table class="tblHeader" style="width: 100%;">
-                            <tr style="height: 30px;" align="center" valign="top">
-                                <td style="width: 5px;">
-                                    &nbsp;
-                                </td>
-                                <td id="tdFeatureHeading" align="left" valign="middle" class="tdInfoHeader">
-                                </td>
-                                <td style="width: 25px;">
-                                    <img src="images/close.png" class="imgOptions" title="Close" onclick="HideFeatureInformationContainer();" />
-                                </td>
-                            </tr>
-                        </table>
-                        <div align="center" id="divFeatureDataScrollbarContainer" class="divFeatureDataScrollbarContainer">
-                            <div id="divFeatureDataScrollbarContent" class="divFeatureDataScrollbarContent">
-                            </div>
-                        </div>
-                    </div>
-                </td>
-            </tr>
-        </table>
-    </div>
-    <div id="divParcelInformation" align="center" class="opacityHideAnimation divParcelInformation">
-        <table style="width: 100%; height: 100%;">
-            <tr align="center" valign="middle">
-                <td>
-                    <div id="divParcelInfoWindow" class="hideContainer divParcelInfoWindow">
-                        <table class="tblHeader" style="width: 100%;">
-                            <tr style="height: 30px;" align="center" valign="top">
-                                <td style="width: 5px;">
-                                    &nbsp;
-                                </td>
-                                <td id="tdInfoHeader" align="left" valign="middle" class="tdInfoHeader">
-                                </td>
-                                <td id="tdList" style="display: none;" align="right">
-                                    <img src="images/back.png" class="imgOptions" title="List" style="cursor: pointer;"
-                                        onclick="" />
-                                </td>
-                                <td style="width: 25px;">
-                                    <img src="images/close.png" class="imgOptions" title="Close" onclick="HideParcelInformationContainer();" />
-                                </td>
-                            </tr>
-                        </table>
-                        <div align="center" id="divParcelDataScrollContainer" class="divParcelDataScrollContainer">
-                            <div id="divParcelScrollContent" class="divParcelScrollContent">
-                            </div>
-                        </div>
-                        <div align="center" id="divNeighborhoodContainer" class="divNeighborhoodContainer"
-                            style="display: none;">
-                            <div id="divNeighborhoodContent" class="divNeighborhoodContent">
-                                <table style="width: 95%;">
-                                    <tr>
-                                        <td style="border-bottom: 1px solid #fff; text-align: left;">
-                                            <span id="spanHeader" class="spanHeader"></span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td align="left">
-                                            <span id="spanContent" class="spanContent" style="text-align: left;"></span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td style="width: 100%; text-align: left">
-                                            <div id="divChartContainer" class="divChartContainer" style="display: none;">
-                                                <div id="divChartContent" class="divChartContent">
-                                                </div>
-                                                <div id="divLegend" class="divLegend" style="text-align: left; width: 100%;">
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </div>
-                        </div>
-                        <div align="center" id="divBroadbandContainer" class="divBroadbandContainer" style="display: none;">
-                            <div id="divBroadbandContent" class="divBroadbandContent">
-                            </div>
-                        </div>
-                        <table>
-                            <tr>
-                                <td align="center" id="tdTabBar">
-                                    <div id="divTabBar" dojotype="dojox.mobile.TabBar" bartype="segmentedControl">
-                                        <div id="divProperty" dojotype="dojox.mobile.TabBarButton" selected="true" style="outline:none;" onclick="ShowProperty();">
-                                            Property</div>
-                                        <div id="divNeighborhood" dojotype="dojox.mobile.TabBarButton" style="outline:none;" onclick="ShowNeighborhood();">
-                                            Neighborhood</div>
-                                        <div dojotype="dojox.mobile.TabBarButton" style="outline:none;" onclick="ShowBroadband();">
-                                            Broadband</div>
-                                    </div>
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
-                </td>
-            </tr>
-        </table>
-    </div>
-    <div id="divLoadingIndicator" class="divLoadingIndicator" style="display: none;">
-        <table style="width: 100%; height: 100%;">
-            <tr align="center" valign="middle">
-                <td>
-                    <img src="images/loader.gif" />
-                </td>
-            </tr>
-        </table>
-    </div>
-</body>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>Brookdale Cemetery</title>
+		<link id="stylesheet" href='http://serverapi.arcgisonline.com/jsapi/arcgis/2.8/js/dojo/dojox/mobile/themes/iPhone/iPhone.css'
+		rel='stylesheet' />
+		<link href="styles/taxParcel.css" rel="stylesheet" type="text/css" />
+		<link rel="Stylesheet" id="dynamicStyleSheet" />
+		<link rel="apple-touch-icon" href="images/TownSealRing.png" />
+		<script type="text/javascript">
+			djConfig = {
+				parseOnLoad : true,
+				mblHideAddressBar : false,
+				baseUrl : "./",
+				modulePaths : {
+					"js" : "js"
+				}
+			}
+		</script>
+		<script type="text/javascript" src="http://serverapi.arcgisonline.com/jsapi/arcgis/?v=2.8compact"></script>
+		<script src="js/modernizr-2.5.3.js" type="text/javascript"></script>
+		<script src="js/infoWindow.js" type="text/javascript"></script>
+		<script src="js/utils.js" type="text/javascript"></script>
+		<script src="js/Common.js" type="text/javascript"></script>
+
+		<script type="text/javascript">
+			dojo.require("esri.map");
+			dojo.require("mobile.InfoWindow");
+			dojo.require("esri.tasks.geometry");
+			dojo.require("esri.tasks.query");
+			dojo.require("dojox.mobile.parser");
+			dojo.require("dojox.mobile");
+			dojo.require("dojo.string");
+			dojo.require("dojo.date.locale");
+
+			dojo.require("esri.layers.FeatureLayer");
+
+			dojo.require("js.config");
+			dojo.require("dojo.number");
+			dojo.require("js.date");
+
+			dojo.require("dojo.window");
+
+			//Search store variables
+			var featureID;
+
+			var map;
+			var tempLayerId = "tempLayerID";// Used for locator
+			var tempParcelLayerId = "tempParcelLayerID";// Used for lot selection
+			var defaultSymbol;
+
+			var isMobileDevice = false;
+
+			var mapPoint;
+			var isiOS = false;
+			var isBrowser = false;
+			var isTablet = false;
+
+			var selectedGraphic;
+
+			var geometryService;
+
+			// Used for locator
+			var geolocatedImage;
+
+			var showNullValueAs;
+			var selectedAddressColor;
+			// Color when row selected in table
+
+			// Lot layer and Grave table variables
+			var lotFields;
+			var tableFields;
+			var tableDisplayFields;
+			var graveQuery;
+			var graveRelateId;
+			var LotFeatureLayer;
+			var cemeteryKey;
+			var lotLayer;
+			var basemapLayer;
+
+			var mapExtent  // Save default extent for checking extent when activating GPS
+
+			//Lot attributes variable to store for pop-ups
+			var g_LotLocation, g_GravesTotal, g_GravesAvail, g_OwnerLast, g_OwnerFirst, g_OwnerTitle, g_Book, g_Page, g_PurchDate;
+
+			// Function: init
+			// Description: Called during OnLoad. Parses config.js and initializes values
+			function init() {
+
+				window.onkeydown = function(e) {
+					return !((e.keyCode == 9) || (e.keyCode == 13));
+				};
+
+				if (!Modernizr.geolocation) {
+					dojo.byId("tdGPS").style.display = "none";
+				}
+
+				dojo.xhrGet({
+					url : "errorMessages.xml",
+					handleAs : "xml",
+					preventCache : true,
+					load : function(xmlResponse) {
+						messages = xmlResponse;
+					}
+				});
+
+				esri.config.defaults.io.proxyUrl = "http://gis.dedham-ma.gov/proxy/proxy.ashx";
+				//Setting to use proxy file
+				esri.config.defaults.io.alwaysUseProxy = false;
+				esri.config.defaults.io.timeout = 180000;
+				//ersi request timeout value
+				esri.config.defaults.io.postLength = 512;
+
+				// Get values from config file
+				var responseObject = new js.config();
+
+				selectedAddressColor = responseObject.SelectedRecordColor;
+				geolocatedImage = responseObject.GeolocatedImage;
+				lotLayer = responseObject.LotLayer;
+				queryLayerString = lotLayer.ServiceURL;
+				lotFields = lotLayer.Fields;
+				queryTableString = responseObject.GraveTable.ServiceURL;
+				tableFields = responseObject.GraveTable.Fields;
+				tableDisplayFields = responseObject.GraveTable.DisplayFields;
+				graveRelateId = lotLayer.GraveTableRelateId;
+				graveQuery = responseObject.GraveTable.BurialQuery;
+				showNullValueAs = responseObject.ShowNullValueAs;
+
+
+				LotFeatureLayer = new esri.layers.FeatureLayer(queryLayerString);
+
+				// Set up display for device
+				var userAgent = window.navigator.userAgent;
+
+				if (userAgent.indexOf("iPhone") >= 0 || userAgent.indexOf("iPad") >= 0) {
+					isiOS = true;
+				}
+
+				if (userAgent.indexOf("Android") >= 0 || userAgent.indexOf("iPhone") >= 0) {
+					isMobileDevice = true;
+					dojo.byId('dynamicStyleSheet').href = "styles/mobile.css";
+					dojo.byId('divSplashContent').style.fontSize = "15px";
+				} else if (userAgent.indexOf("iPad") >= 0) {
+					isTablet = true;
+					dojo.byId('dynamicStyleSheet').href = "styles/tablet.css";
+					dojo.byId('divSplashContent').style.fontSize = "14px";
+				} else {
+					isBrowser = true;
+					dojo.byId('dynamicStyleSheet').href = "styles/browser.css";
+					dojo.byId('divSplashContent').style.fontSize = "11px";
+				}
+
+				if (isMobileDevice) {
+					dojo.byId('divSidePanel').style.display = 'none';
+					dojo.byId('divAddressResultContainer').appendChild(dojo.byId('tblAddressSearch'));
+					dojo.byId('divAddressContainer').style.display = "none";
+					dojo.replaceClass("divAddressContainer", "", "opacityHideAnimation");
+					dojo.byId("tdHelp").style.display = "none";
+					dojo.byId('divSplashScreenDialog').style.width = "95%";
+					dojo.byId('divSplashScreenDialog').style.height = "95%";
+					dojo.byId('divParcelInformation').style.display = "none";
+					dojo.byId('divParcelInformation').className = "";
+
+					dojo.byId("lblAppName").style.display = "none";
+					dojo.byId("lblAppName").style.width = "80%";
+					dojo.byId("divLogo").style.display = "none";
+
+				} else {
+					dojo.byId('divAddressSearch').appendChild(dojo.byId('tblAddressSearch'));
+					dojo.byId('divSplashScreenDialog').style.width = "350px";
+					dojo.byId('divSplashScreenDialog').style.height = "290px";
+					dojo.byId("divLogo").style.display = "block";
+
+				}
+
+				ShowProgressIndicator();
+
+				// Setup splash screen
+				dojo.byId('divSplashScreenContainer').style.display = "block";
+
+				dojo.addClass(dojo.byId('divSplashScreenDialog'), "divSplashScreenDialogContent");
+				dojo.byId('lblAppName').innerHTML = responseObject.ApplicationName;
+
+				dojo.byId('imgApplication').src = responseObject.ApplicationIcon;
+				dojo.byId('divSplashContent').innerHTML = responseObject.SplashScreenMessage;
+
+				dojo.replaceClass("divSplashScreenDialog", "showContainer", "hideContainer");
+
+				SetHeightSplashScreen();
+
+				// Set Info Window
+				var infoWindow = new mobile.InfoWindow({
+					domNode : dojo.create("div", null, dojo.byId("map"))
+				});
+
+				map = new esri.Map("map", {
+					slider : true,
+					infoWindow : infoWindow
+				});
+				geometryService = new esri.tasks.GeometryService(responseObject.GeometryService);
+
+				// Set up onLoad Event.... triggers MapInitFunction
+				dojo.connect(map, "onLoad", function() {
+					MapInitFunction();
+					mapExtent = responseObject.DefaultExtent.split(',');
+					var extent = GetQuerystring('extent');
+					if (extent != "") {
+						mapExtent = extent.split(',');
+					}
+
+					mapExtent = new esri.geometry.Extent(parseFloat(mapExtent[0]), parseFloat(mapExtent[1]), parseFloat(mapExtent[2]), parseFloat(mapExtent[3]), map.spatialReference);
+					map.setExtent(mapExtent);
+				});
+
+				// Add Basemap
+				basemapLayer = responseObject.BaseMapLayer;
+				var basemap = new esri.layers.ArcGISTiledMapServiceLayer(basemapLayer.ServiceURL);
+				basemap.id = basemapLayer.Key;
+				map.addLayer(basemap);
+
+				// Add Cemetery Lots Layer
+				cemeteryKey = responseObject.CemeteryLayer.Key;
+				var cemeteryMap = new esri.layers.ArcGISDynamicMapServiceLayer(responseObject.CemeteryLayer.ServiceURL, {
+					"id" : cemeteryKey,
+					"opacity" : responseObject.CemeteryLayer.Opacity
+				});
+				map.addLayer(cemeteryMap);
+
+				// Help Menu
+				dojo.connect(dojo.byId('help'), "onclick", function() {
+					window.open(responseObject.HelpURL);
+				});
+
+				HideProgressIndicator();
+
+			}
+
+			// Function: MapInitFunction
+			// Description: Initialize map
+			function MapInitFunction() {
+
+				if (!isMobileDevice) {
+					window.onresize = function() {
+						resizeHandler();
+					}
+				}
+
+				var mapSlider = dojo.query(".esriSimpleSlider", this.domNode);
+				if (mapSlider.length > 0) {
+					dojo.addClass(mapSlider[0], "roundedCorner");
+				}
+
+				HideProgressIndicator();
+
+				// Used for locator GPS (I think)
+				var gLayer = new esri.layers.GraphicsLayer();
+				//Adding a temporary graphics layer
+				gLayer.id = tempLayerId;
+				map.addLayer(gLayer);
+
+				// Used for selection symbol
+				var tempParcelLayer = new esri.layers.GraphicsLayer();
+				//Adding a temporary graphics layer
+				tempParcelLayer.id = tempParcelLayerId;
+				map.addLayer(tempParcelLayer);
+
+				// Setup Map Extent Change Event... moves identify window
+				dojo.connect(map, "onExtentChange", function(evt) {
+					mapScale = map.getLayer(basemapLayer.Key).tileInfo.lods[map.getLevel()].scale;
+					if (!isOrientationChanged) {
+						if (selectedGraphic) {
+							var screenPoint = map.toScreen(selectedGraphic);
+							screenPoint.y = map.height - screenPoint.y;
+							map.infoWindow.setLocation(screenPoint);
+							console.log("extent changed");
+							return;
+						}
+					}
+
+				});
+
+				// Setup Map OnClick Event
+				dojo.connect(map, "onClick", function(evt) {
+					selectedGraphic = null;
+					if (!isMobileDevice) {
+						dojo.byId("divParcelInformation").style.display = "none";
+					}
+					ShowFeatureInfoWindow2(evt.mapPoint);
+
+				});
+
+			}
+
+			// Attach initialization script to OnLoad
+			dojo.addOnLoad(init);
+		</script>
+	</head>
+	<body onorientationchange="OrientationChanged();">
+		<div id="mapView" style="width: 100%; height: 100%;">
+			<div id="map" style="width: 100%; height: 100%;"></div>
+		</div>
+		<div id="divLogo" class="divLogo">
+			<table style="width: 100%;">
+				<tr>
+					<td><img id="imgApplication" class="imgApplication" src="images/logo.png" /></td>
+				</tr>
+			</table>
+		</div>
+		<div class="divApplicationHeader" align="right">
+			<table cellpadding="0" cellspacing="0" class="tableHeader">
+				<tr>
+					<td id="lblAppName" class="lblAppName" align="left" style="color: White;"></td>
+					<td align="right">
+					<table>
+						<tr>
+							<td align="center" align="left" id="tdsearch" class="tdHeader"><img alt="Settings" src="images/locate.png" class="imgOptions" title="Search Parcel"
+							onclick="ShowSearchPanel();" /></td>
+							<td align="center" align="left" id="tdGPS" class="tdHeader"><img src="images/gps.png" class="imgOptions" title="Locate" onclick="ShowMyLocation()" /></td>
+							<td align="center" align="left" id="help" class="tdHeader"><img src="images/help.png" title="Help" class="imgOptions" /></td>
+						</tr>
+					</table></td>
+				</tr>
+			</table>
+		</div>
+		<div id="divSplashScreenContainer" class="divSplashScreenContainer" style="display: none;">
+			<table style="width: 100%; height: 100%;">
+				<tr align="center" valign="middle">
+					<td>
+					<div id="divSplashScreenDialog" class="hideContainer divSplashScreenDialog">
+						<table style="width: 100%;">
+							<tr>
+								<td>
+								<div id="divSplashContainer" class="divSplashContainer" style="margin-top: 10px;">
+									<div id="divSplashContent" class="divSplashContent"></div>
+								</div></td>
+							</tr>
+							<tr>
+								<td align="center">
+								<div style="width: 75px;" class="customButton" onclick="HideSplashScreenMessage();">
+									<div class="customButtonInner">
+										<table style="width: 100%; height: 100%;">
+											<tr>
+												<td align="center" valign="middle"> OK </td>
+											</tr>
+										</table>
+									</div>
+								</div></td>
+							</tr>
+						</table>
+					</div></td>
+				</tr>
+			</table>
+		</div>
+		<div id="divAddressContainer" class=" opacityHideAnimation divAddressContainer" align="center"
+		style="display: none;">
+			<table style="width: 100%; height: 100%;">
+				<tr align="center" valign="middle">
+					<td>
+					<div id="divAddressContent" class="showContainer divAddressContent">
+						<table class="tblHeader" style="width: 100%;">
+							<tr style="height: 30px;" align="center" valign="top">
+								<td style="width: 5px;"></td>
+								<td class="tdHeading" align="left" valign="middle"> Search </td>
+								<td style="width: 25px;"><img src="images/close.png" class="imgOptions" title="Close" onclick="HideAddressContainer();" /></td>
+							</tr>
+						</table>
+						<div id="divAddressResultContainer" class="divAddressResultContainer" style="width: 98%;"></div>
+					</div></td>
+				</tr>
+			</table>
+		</div>
+
+		<table id="tblAddressSearch" class="tblAddressSearch" style="color: #fff; width: 100%;
+		margin-left: 5px;">
+			<tr>
+				<td>
+				<table style="margin-top: 10px; width: 100%;">
+					<tr>
+						<td width="5%"> Search </td>
+						<td></td>
+						<td>
+						<div id="divAddressPlaceHolder" class="divAddressPlaceHolder">
+							<input type="text" id="txtSearchBox" class="txtAddress" readonly="readonly" />
+							<img src="images/locate.png" id="imgLocate" class="imgLocate" title="Search" onclick="SearchBurialTable();" />
+						</div></td>
+					</tr>
+				</table><div id="divAddressHeader"></div>
+				<table id="tblSearchInfo" style="margin-top: 10px;">
+					<tr>
+						<td> Search by for an individual, by entering first or last name. </td>
+					</tr>
+					<tr></tr>
+					<tr></tr>
+					<tr>
+						<td> Enter a number to search by lot number.</td>
+					</tr>
+					<tr></tr>
+					<tr></tr>
+					<tr>
+						<td> You can also interact directly with the map and click on lots to get information. </td>
+					</tr>
+					<tr></tr>
+					<tr></tr>
+					<tr>
+						<td id="tdHelp"> See the Help document if you are just getting started. </td>
+					</tr>
+				</table>
+				<div id="divAddressList" class="divAddressList">
+					<div id="divAddressScrollContainer" class="divAddressScrollContainer">
+						<div id="divAddressScrollContent" class="divAddressScrollContent">
+							<table id="tblAddressResults" class="tblAddressResults"></table>
+						</div>
+					</div>
+				</div></td>
+			</tr>
+		</table>
+		<div id="divSidePanel" class="divSidePanel">
+
+			<div id="divDataContainer" class="divDataContainer">
+				<div id="divAddressSearch" class="divAddressSearch"></div>
+
+			</div>
+		</div>
+
+		<div id="divParcelInformation" align="center" class="opacityHideAnimation divParcelInformation">
+			<table style="width: 100%; height: 100%;">
+				<tr align="center" valign="middle">
+					<td>
+					<div id="divParcelInfoWindow" class="hideContainer divParcelInfoWindow">
+						<table class="tblHeader" style="width: 100%;">
+							<tr style="height: 30px;" align="center" valign="top">
+								<td style="width: 5px;"> &nbsp; </td>
+								<td id="tdInfoHeader" align="left" valign="middle" class="tdInfoHeader"></td>
+								<td id="tdList" style="display: none;" align="right"><img src="images/back.png" class="imgOptions" title="List" style="cursor: pointer;"
+								onclick="" /></td>
+								<td style="width: 25px;"><img src="images/close.png" class="imgOptions" title="Close" onclick="HideParcelInformationContainer();" /></td>
+							</tr>
+						</table>
+						<div align="center" id="divParcelDataScrollContainer" class="divParcelDataScrollContainer">
+							<div id="divParcelScrollContent" class="divParcelScrollContent"></div>
+						</div>
+
+					</div></td>
+				</tr>
+			</table>
+		</div>
+		<div id="divLoadingIndicator" class="divLoadingIndicator" style="display: none;">
+			<table style="width: 100%; height: 100%;">
+				<tr align="center" valign="middle">
+					<td><img src="images/loader.gif" /></td>
+				</tr>
+			</table>
+		</div>
+	</body>
 </html>

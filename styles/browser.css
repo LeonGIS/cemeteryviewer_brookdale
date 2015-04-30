@@ -1,20 +1,4 @@
-﻿/*
- | Version 10.2
- | Copyright 2012 Esri
- |
- | Licensed under the Apache License, Version 2.0 (the "License");
- | you may not use this file except in compliance with the License.
- | You may obtain a copy of the License at
- |
- |    http://www.apache.org/licenses/LICENSE-2.0
- |
- | Unless required by applicable law or agreed to in writing, software
- | distributed under the License is distributed on an "AS IS" BASIS,
- | WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- | See the License for the specific language governing permissions and
- | limitations under the License.
- */
-/* This file contains the browser specific style settings for "Election Results" template */
+﻿/* This file contains the browser specific style settings for "Election Results" template */
 /* The common settings for the styles are defined in "electionresults.css" */
 
 /* Use this file to perform the following: */
@@ -26,7 +10,7 @@
 /* 4.  Set the styles for info window           - { Style(s) to look for: divItemsContainer,divItemsContent,divParcelDataScrollContainer,divFeatureDataScrollbarContainer,
                                                                           divBroadbandContainer, #divNeighborhoodContainer,divParcelScrollContent, #divNeighborhoodContent,
                                                                           #divBroadbandContent,divFeatureDataScrollbarContent,scrollbar_footer}*/
-/* 5.  Set the styles for tab container          - { Style(s) to look for: mblTabBarButton}*/
+/* 5.  Set the styles for tab container          - { Style(s) to look for: mblTabButton}*/
 /* 6.  Set the styles for basemap                - { Style(s) to look for: basemapThumbnail}*/
 /* 7.  Set the styles for esri slider            - { Style(s) to look for: esriSimpleSlider}*/
 
@@ -159,7 +143,8 @@ html, body
 }
 #divParcelDataScrollContainer
 {
-    height: 192px;
+    /*height: 192px;    LCS 12/28/2012*/
+    height: 222px;
     position: relative;
     width: 325px;
 }
@@ -170,17 +155,12 @@ html, body
     width: 325px;
     overflow: hidden;
 }
-#divBroadbandContainer, #divNeighborhoodContainer
-{
-    height: 192px;
-    position: relative;
-    width: 325px;
-}
 
 
 #divParcelScrollContent, #divNeighborhoodContent, #divBroadbandContent
 {
-    height: 192px;
+      /*height: 192px;    LCS 12/28/2012*/
+    height: 222px;
     position: relative;
     width: 325px;
     overflow: hidden;
@@ -208,7 +188,7 @@ html, body
 
 /*Styles for the tab container*/
 
-.mblTabBarSegmentedControl .mblTabBarButton
+.mblTabButton
 {
     /*width: 95px;*/
     width: 105px; /*  min-width: 95px;*/
@@ -238,12 +218,4 @@ html, body
 {
     left: 360px !important;
     top: 70px !important;
-}
-
-/* Additional Styles */
-.divLayers
-{
-        max-height:350px;
-        width:93%;
-        overflow:hidden;
 }
